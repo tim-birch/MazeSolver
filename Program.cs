@@ -64,23 +64,35 @@ namespace MazeSolver
 				var inFile = args[0].Trim();
 				outFile = args[1].Trim();
 #endif
+				// verify input file and load into bitmap
 				inFile = Path.GetFullPath(inFile);
-				outFile = Path.GetFullPath(outFile);
 				if (!File.Exists(inFile))
 				{
 					DisplayUsage();
 					return;
 				}
-				if (File.Exists(outFile))
-					File.Delete(outFile);
-
-				// load the image file into a bitmap
 				_bitmap = new Bitmap(inFile);
+
+				// verify output file
+				outFile = Path.GetFullPath(outFile);
+				switch (Path.GetExtension(outFile).ToLower())
+				{
+					case ".bmp":
+					case ".png":
+					case ".jpg":
+						if (File.Exists(outFile))
+							File.Delete(outFile);
+						break;
+
+					default:
+						DisplayUsage();
+						return;
+				}
 			}
-			catch
+			catch (Exception ex)
 			{
 				// error here if the input file wasn't a valid image file
-				DisplayUsage();
+				Console.WriteLine($"ERROR: {ex.Message}");
 				return;
 			}
 
@@ -123,9 +135,27 @@ namespace MazeSolver
 				// recursively walk through the maze to see if a solution exists
 				if (SolveMaze(startX, startY, startX, startY))
 				{
-					// save the solution with the path between the start and end colored
-					_bitmap.Save(outFile, ImageFormat.Png);
-					Console.WriteLine($"Solution saved in {outFile}");
+					try
+					{
+						// save the solution with the path between the start and end colored
+						switch (Path.GetExtension(outFile).ToLower())
+						{
+							case ".bmp":
+								_bitmap.Save(outFile, ImageFormat.Bmp);
+								break;
+							case ".png":
+								_bitmap.Save(outFile, ImageFormat.Png);
+								break;
+							case ".jpg":
+								_bitmap.Save(outFile, ImageFormat.Jpeg);
+								break;
+						}
+						Console.WriteLine($"Solution saved in {outFile}");
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine($"ERROR saving output: {ex.Message}");
+					}
 				}
 				else
 				{
