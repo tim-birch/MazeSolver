@@ -30,7 +30,7 @@ namespace MazeSolver
 		private int _cellWidth = 0;
 
 		// returns true if RGB of 2 colors match
-		private bool IsMatchingColor(Color color1, Color color2) => color1.R == color2.R && color1.G == color2.G && color1.B == color2.B;
+		private static bool IsMatchingColor(Color color1, Color color2) => color1.R == color2.R && color1.G == color2.G && color1.B == color2.B;
 
 		// converts pixel to 0-based cell number
 		private int PixelToCell(int pixel) => pixel / _cellWidth;
@@ -80,13 +80,13 @@ namespace MazeSolver
 			using (_pathPen = new Pen(_pathColor, 3))
 			{
 				// call the recursive function to walk through the maze
-				return SolveMaze(startX, startY, startX, startY);
+				return SolveRecursively(startX, startY, startX, startY);
 			}
 		}
 
 		// This function is called recursively to find a solution by walking
 		// through the maze one cell at a time and looking in all directions.
-		private bool SolveMaze(int fromX, int fromY, int toX, int toY)
+		private bool SolveRecursively(int fromX, int fromY, int toX, int toY)
 		{
 			// first check if out-of-bounds
 			if (toX < 0 || toX >= _bitmap.Width / _cellWidth || toY < 0 || toY >= _bitmap.Height / _cellWidth)
@@ -131,7 +131,7 @@ namespace MazeSolver
 			{
 				var newX = toX + _dirX[d];
 				var newY = toY + _dirY[d];
-				if (SolveMaze(toX, toY, newX, newY))
+				if (SolveRecursively(toX, toY, newX, newY))
 				{
 					// once we've hit the end cell, draw the green path line
 					// (will be recursively drawn backwards from end to start)
