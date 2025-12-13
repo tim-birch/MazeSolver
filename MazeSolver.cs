@@ -98,26 +98,14 @@ namespace MazeSolver
 				return false;
 
 			// then check if a border exists between the 2 cells
-			if (fromX < toX)
-			{
-				if (HasBorderBetweenXCells(fromX, toX, toY))
-					return false;
-			}
-			if (fromX > toX)
-			{
-				if (HasBorderBetweenXCells(toX, fromX, toY))
-					return false;
-			}
-			if (fromY < toY)
-			{
-				if (HasBorderBetweenYCells(fromY, toY, toX))
-					return false;
-			}
-			if (fromY > toY)
-			{
-				if (HasBorderBetweenYCells(toY, fromY, toX))
-					return false;
-			}
+			if (fromX < toX && HasBorderBetweenXCells(fromX, toX, toY))
+				return false;
+			if (fromX > toX && HasBorderBetweenXCells(toX, fromX, toY))
+				return false;
+			if (fromY < toY && HasBorderBetweenYCells(fromY, toY, toX))
+				return false;
+			if (fromY > toY && HasBorderBetweenYCells(toY, fromY, toX))
+				return false;
 
 			// return true if we're at the ending cell
 			if (IsMatchingColor(_bitmap.GetPixel(CellToPixel(toX), CellToPixel(toY)), _endColor))
