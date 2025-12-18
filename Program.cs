@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -20,10 +21,6 @@ namespace MazeSolver
 			// verify an input image file was passed in, and load it
 			try
 			{
-#if DEBUG
-				var inFile = AppDomain.CurrentDomain.BaseDirectory + @"..\..\Maze.png";
-				outFile = AppDomain.CurrentDomain.BaseDirectory + @"..\..\Solved.png";
-#else
 				if (args.Length < 2)
 				{
 					DisplayUsage();
@@ -31,7 +28,7 @@ namespace MazeSolver
 				}
 				var inFile = args[0].Trim();
 				outFile = args[1].Trim();
-#endif
+
 				// verify input file and load into bitmap
 				inFile = Path.GetFullPath(inFile);
 				if (!File.Exists(inFile))
